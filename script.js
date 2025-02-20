@@ -4,6 +4,8 @@ const startButton = document.getElementById('startButton');
 const exitbutton = document.getElementById('exitbutton');
 const restartButton = document.getElementById('restartButton');
 const finalScore = document.getElementById('finalScore');
+const menuButton = document.getElementById('menuButton');
+
 var keys = {};
 
 // Variáveis do jogo
@@ -18,6 +20,7 @@ var enemySpeedIncrement = 0; // Variável para incrementar a velocidade dos inim
 // Objeto de áudio
 var backgroundMusic = new Audio('Demo.mp3');
 var dashSound       = new Audio('Dash.mp3');
+var gameOverSound   = new Audio('Brincadeira_gente.mp3');
 
 // Garante que o som seja carregado antes, evitando problemas de reprodução em navegadores
 backgroundMusic.preload = 'auto'; 
@@ -345,6 +348,11 @@ function endGame() {
     
     // Pausar a música de fundo
     backgroundMusic.pause();
+    backgroundMusic.currentTime = 0; // Reinicia a música para a próxima partida
+
+    // Reproduzir o som de game over
+    gameOverSound.currentTime = 0; // Reinicia o áudio para garantir que toque do início
+    gameOverSound.play ();
 }
 
 // Funções de colisão
@@ -374,7 +382,15 @@ function circleRectCollision(circle, rect) {
 
 // Eventos dos botões
 startButton.addEventListener('click', startGame);
+
 restartButton.addEventListener('click', startGame);
+
+menuButton.addEventListener('click', function() {
+    document.getElementById('gameOver').style.display = 'none';
+    canvas.style.display = 'none';
+    document.getElementById('menu').style.display = 'block';
+});
+
 exitbutton.addEventListener('click', function() {
     window.close();
 });
