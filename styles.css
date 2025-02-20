@@ -1,0 +1,55 @@
+/* Estilos gerais */
+body {
+    background-color: black;
+    /* background-image: linear-gradient(black, gray, black); */
+    /* background-image: url("galaxia_foda.jpg"); */
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* Estilos para o canvas */
+canvas {
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #ffffff;
+}
+
+/* Estilos para o menu */
+#menu {
+    margin-top: 50px;
+}
+
+#menu button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+}
+
+/* Estilos para o Game Over */
+#gameOver {
+    display: none;
+    text-align: center;
+    margin-top: 50px;
+}
+
+#gameOver button {
+    color: black;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+}
+
+/* Estilos para os títulos e textos */
+h1 {
+    color: rgb(20, 211, 51);
+}
+
+h2, h3 {
+    color: red;
+}
+
+h4 {
+    color: rgb(255, 255, 255);
+}
+

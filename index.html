@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo legal, bacanoso, interessante, envolvente, ótimo</title>
+    <!-- Link para o arquivo CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="menu">
+    <canvas id="menuCanvas" width="800" height="600" style="display: none;"></canvas>
+    <h1>Jogo legal, bacanoso, interessante, envolvente, ótimo</h1>
+    <h1>Feito por: Gabriel Lima</h1>
+    <h2>Teclas para jogar:</h2>
+    <h3>Setas direcionais: movimentam o jogador</h3>
+    <h3>Barra de espaço: realiza o dash</h3>
+    <h3>O dash tem um cooldown de 2 segundos. Em cima do jogador há uma barra indicativa do cooldown</h3>
+    <h4 style="color: yellow;">Quando amarela, a barra está carregando</h4>
+    <h4 style="color: orange;">Quando laranja, está completa e o dash pode ser usado novamente</h4>
+    <h4 style="color: rgb(255, 255, 255);">Ajustes futuros serão implementados</h4>
+    <h4 style="color: rgb(255, 255, 255);">Sugestões? Enviar e-mail para: gabriel.lima108@fatec.sp.gov.br</h4>
+	<h4 style="color: rgb(0, 0, 0):">Faz um pix? Email: gabriels.delima18@gmail.com</h4>
+    <button id="startButton">Iniciar</button>
+    <button id="exitbutton">Sair</button>
+</div>
+
+<div id="gameOver">
+    <h1 style="color: orange;">Game Over</h1>
+    <p>Sua pontuação: <span id="finalScore"></span></p>
+    <button id="restartButton">Reiniciar</button>
+</div>
+
+<canvas id="gameCanvas" width="800" height="600" style="display: none;"></canvas>
+
+<!-- Script para o arquivo JavaScript -->
+<script src="script.js"></script>
+
+</body>
+</html>
