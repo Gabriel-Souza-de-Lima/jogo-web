@@ -1,10 +1,8 @@
 /* Estilos gerais */
 body {
-    background-color: black;
-    /* background-image: linear-gradient(black, gray, black); */
-    /* background-image: url("galaxia_foda.jpg"); */
-    margin: 0;
-    padding: 0;
+    font-family: 'Poppins', 'Quicksand', sans-serif;
+    background-color: #101820; /* Azul petróleo escuro */
+    color: #D3D3D3;
     text-align: center;
 }
 
@@ -16,14 +14,11 @@ canvas {
 }
 
 /* Estilos para o menu */
-#menu {
-    margin-top: 50px;
-}
-
-#menu button {
+button {
+    font-family: 'Poppins', 'Quicksand', sans-serif;
+    font-size: 1em;
+    border-radius: 10px; /* Deixa os botões mais arredondados */
     padding: 10px 20px;
-    margin: 5px;
-    font-size: 16px;
 }
 
 /* Estilos para o Game Over */
@@ -41,15 +36,39 @@ canvas {
 }
 
 /* Estilos para os títulos e textos */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', 'Quicksand', sans-serif;
+    font-weight: 700;
+}
+
 h1 {
-    color: rgb(20, 211, 51);
+    color: #FFD700; /* Dourado */
+    font-size: 2.2em;
+    text-shadow: 2px 2px 5px rgba(255, 215, 0, 0.5);
 }
 
 h2, h3 {
-    color: red;
+    color: #FF6347; /* Tomate */
+    font-size: 1.5em;
 }
 
-h4 {
-    color: rgb(255, 255, 255);
+h4, p {
+    color: #D3D3D3; /* Cinza claro */
+    font-size: 1.2em;
+}
+
+h5 {
+    color: #87CEEB; /* Azul Claro (SkyBlue) */
+    font-size: 1.0em;
+}
+
+h6 {
+    color: #90EE90; /* Verde Claro (LightGreen) */
+    font-size: 0.8em;
+}
+
+strong, .destaque {
+    color: #FFA500; /* Laranja */
+    font-weight: bold;
 }
 
