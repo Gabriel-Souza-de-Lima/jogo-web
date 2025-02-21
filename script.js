@@ -24,6 +24,8 @@ var enemySpeedIncrement = 0; // Variável para incrementar a velocidade dos inim
 //#region [ ÁUDIOS ]
 // Objeto de áudio
 var backgroundMusic = new Audio('Demo.mp3');
+backgroundMusic.loop = true;
+
 var dashSound       = new Audio('Dash.mp3');
 var gameOverSound   = new Audio('Brincadeira_gente.mp3');
 
