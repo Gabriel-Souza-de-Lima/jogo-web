@@ -12,29 +12,55 @@
     <canvas id="menuCanvas" width="800" height="600" style="display: none;"></canvas>
     <h1>Jogo legal, bacanoso, interessante, envolvente, ótimo</h1>
     <h1>Feito por: Gabriel Lima</h1>
-    <h2>Teclas para jogar:</h2>
-    <h3>Setas direcionais: movimentam o jogador</h3>
-    <h3>Barra de espaço: realiza o dash</h3>
-    <h3>O dash tem um cooldown de 2 segundos. Em cima do jogador há uma barra indicativa do cooldown</h3>
-    <h4>Quando amarela, a barra está carregando</h4>
-    <h4>Quando laranja, está completa e o dash pode ser usado novamente</h4>
-    <h4>Ajustes futuros serão implementados</h4>
-    <h5>Sugestões? Enviar e-mail para: gabriel.lima108@fatec.sp.gov.br</h4>
-	<h6>Faz um pix? Email: gabriels.delima18@gmail.com</h4>
+
+    <div id="tutorial">
+        <h2>📜 Como Jogar:</h2>
+        <p><strong>Objetivo:</strong> Desvie dos obstáculos e colete estrelas para aumentar sua pontuação!</p>
+        
+        <h3>🎮 Controles:</h3>
+        <ul>
+            <p><strong>Setas direcionais:</strong> Movimentam o jogador.</p>
+            <p><strong>Barra de espaço:</strong> Realiza o dash.</p>
+        </ul>
+
+        <h3>⚡ Dash e Cooldown:</h3>
+        <p>O dash permite que você se mova rapidamente e fique invencível por um curto período.</p>
+        <p>Ele tem um cooldown de <strong>2 segundos</strong>, indicado por uma <strong>barra acima do jogador</strong>:</p>
+        <ul>
+            <p><span class="yellow-dot"></span> <strong class="yellow-text">Amarela:</strong> O dash está recarregando.</p>
+            <p><span class="orange-dot"></span> <strong class="orange-text">Laranja:</strong> O dash está pronto para ser usado!</p>
+        </ul>
+        
+
+        <h3>💡 Dicas:</h3>
+        <ul>
+            <p>✅ Use o dash para escapar de obstáculos inesperados!</p>
+            <p>✅ Colete estrelas para aumentar sua pontuação!</p>
+            <p>✅ Desvie dos obstáculos para sobreviver o máximo possível!</p>
+        </ul>
+
+        <h3>🚀 Boa sorte!</h3>
+    </div>
+
     <button id="startButton">Iniciar</button>
     <button id="exitbutton">Sair</button>
 </div>
 
 <div id="gameOver">
-    <h1 style="color: orange;">Game Over</h1>
+    <h1 style="color: #FF6347;">Game Over</h1>
     <p>Sua pontuação: <span id="finalScore"></span></p>
     <button id="restartButton">Reiniciar</button>
     <button id="menuButton">Voltar ao Menu</button>
 </div>
 
-<canvas id="gameCanvas" width="800" height="600" style="display: none;"></canvas>
 
-<!-- Script para o arquivo JavaScript -->
+<div id="gameOver">
+    <h1 style="color: orange;">Game Over</h1>
+    <p>Sua pontuação: <span id="finalScore"></span></p>
+    <button id="restartButton">Reiniciar</button>
+</div>
+
+<canvas id="gameCanvas" width="800" height="600" style="display: none;"></canvas>
 <script src="script.js"></script>
 
 </body>

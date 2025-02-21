@@ -254,9 +254,9 @@ function drawGame() {
 
     // Desenhar jogador com cor diferente se estiver invencível
     if (isInvincible) {
-        context.fillStyle = 'green'; // Cor diferente durante a invencibilidade
+        context.fillStyle = '#FFD700'; // Cor diferente durante a invencibilidade
     } else {
-        context.fillStyle = 'blue';
+        context.fillStyle = '#1E90FF';
     }
     context.fillRect(player.x, player.y, player.width, player.height);
 
@@ -270,20 +270,20 @@ function drawGame() {
         const percentage = (dashCooldownTotal - dashCooldownTimer) / dashCooldownTotal;
 
         // Desenhar fundo da barra
-        context.fillStyle = 'gray';
+        context.fillStyle = '#3A423C';
         context.fillRect(x, y, barWidth, barHeight);
 
         // Desenhar parte preenchida da barra
-        context.fillStyle = 'yellow';
+        context.fillStyle = '#FFA500';
         context.fillRect(x, y, barWidth * percentage, barHeight);
     } else {
         // Desenhar barra cheia quando o dash está disponível
-        context.fillStyle = 'orange';
+        context.fillStyle = '#FFA500';
         context.fillRect(x, y, barWidth, barHeight);
     }
 
     // Desenhar estrelas
-    context.fillStyle = 'gold';
+    context.fillStyle = '#FF6347';
     stars.forEach(function(star) {
         context.beginPath();
         context.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
@@ -291,7 +291,7 @@ function drawGame() {
     });
 
     // Desenhar obstáculos
-    context.fillStyle = 'red';
+    context.fillStyle = '#87CEEB';
     obstacles.forEach(function(obstacle) {
         context.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     });
@@ -306,7 +306,7 @@ function drawGame() {
 // Função para desenhar o rastro do dash
 function drawDashTrail() {
     dashTrail.forEach(function(trail) {
-        context.fillStyle = `rgba(0, 255, 0, ${trail.alpha})`; // Mesma cor do jogador invencível com opacidade
+        context.fillStyle = `rgba(255, 210, 127, ${trail.alpha})`; // Mesma cor do jogador invencível com opacidade
         context.fillRect(trail.x, trail.y, trail.width, trail.height);
     });
 }

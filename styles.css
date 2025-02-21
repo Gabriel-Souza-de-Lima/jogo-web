@@ -26,6 +26,7 @@ button {
     display: none;
     text-align: center;
     margin-top: 50px;
+    color: #FF6347;
 }
 
 #gameOver button {
@@ -70,5 +71,35 @@ h6 {
 strong, .destaque {
     color: #FFA500; /* Laranja */
     font-weight: bold;
+}
+
+.yellow-text {
+    color: #FFFF00; /* Amarelo puro */
+}
+
+.orange-text {
+    color: #FFA500; /* Laranja */
+}
+
+.yellow-dot, .orange-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.yellow-dot {
+    background-color: #FFFF00;
+}
+
+.orange-dot {
+    background-color: #FFA500;
+}
+
+/* Estilos para parágrafos */
+p 
+{
+    font-size: 1.0em;
 }
 
