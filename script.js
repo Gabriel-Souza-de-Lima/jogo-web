@@ -1,3 +1,4 @@
+//#region [ CONSTANTES CANVAS E MENU ] 
 const canvas = document.getElementById('gameCanvas');
 const context = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
@@ -5,7 +6,9 @@ const exitbutton = document.getElementById('exitbutton');
 const restartButton = document.getElementById('restartButton');
 const finalScore = document.getElementById('finalScore');
 const menuButton = document.getElementById('menuButton');
+//#endregion
 
+//#region [ VARIÁVEIS DE JOGO ]
 var keys = {};
 
 // Variáveis do jogo
@@ -16,16 +19,23 @@ var score;
 var gameLoop;
 var gameOver = false;
 var enemySpeedIncrement = 0; // Variável para incrementar a velocidade dos inimigos
+//#endregion
 
+//#region [ ÁUDIOS ]
 // Objeto de áudio
 var backgroundMusic = new Audio('Demo.mp3');
+backgroundMusic.loop = true;
+
 var dashSound       = new Audio('Dash.mp3');
 var gameOverSound   = new Audio('Brincadeira_gente.mp3');
+
 
 // Garante que o som seja carregado antes, evitando problemas de reprodução em navegadores
 backgroundMusic.preload = 'auto'; 
 dashSound.preload = 'auto'; 
+//#endregion
 
+//#region [ VARIÁVEIS DE DASH/INVENCIBILIDADE ]
 // Variáveis do dash/invencibilidade
 var isInvincible = false;
 var invincibvarimer = 0;
@@ -36,10 +46,13 @@ var dashCooldownTimer = 0; // Tempo restante de cooldown do dash
 const dashCooldownTotal = 2.0; // Tempo total do cooldown
 const normalSpeed = 5;
 const dashSpeed = normalSpeed * 1.5; // Velocidade durante o dash
-
+ 
 // Variáveis para o rastro do dash (guarda as posições anteriores para criar o efeito de rastro)
 var dashTrail = [];
+//#endregion
 
+
+//#region [ EVENTOS DO TECLADO ] 
 // Eventos do teclado
 document.addEventListener('keydown', function(e) {
     keys[e.key] = true;
@@ -59,7 +72,9 @@ document.addEventListener('keyup', function(e) {
         dashAvailable = true;
     }
 });
+//#endregion
 
+//#region [ FUNÇÕES DO JOGO ]
 // Função para iniciar o jogo
 function startGame() {
     document.getElementById('menu').style.display = 'none';
@@ -241,9 +256,9 @@ function drawGame() {
 
     // Desenhar jogador com cor diferente se estiver invencível
     if (isInvincible) {
-        context.fillStyle = 'green'; // Cor diferente durante a invencibilidade
+        context.fillStyle = '#FFD700'; // Cor diferente durante a invencibilidade
     } else {
-        context.fillStyle = 'blue';
+        context.fillStyle = '#1E90FF';
     }
     context.fillRect(player.x, player.y, player.width, player.height);
 
@@ -257,20 +272,20 @@ function drawGame() {
         const percentage = (dashCooldownTotal - dashCooldownTimer) / dashCooldownTotal;
 
         // Desenhar fundo da barra
-        context.fillStyle = 'gray';
+        context.fillStyle = '#3A423C';
         context.fillRect(x, y, barWidth, barHeight);
 
         // Desenhar parte preenchida da barra
-        context.fillStyle = 'yellow';
+        context.fillStyle = '#FFA500';
         context.fillRect(x, y, barWidth * percentage, barHeight);
     } else {
         // Desenhar barra cheia quando o dash está disponível
-        context.fillStyle = 'orange';
+        context.fillStyle = '#FFA500';
         context.fillRect(x, y, barWidth, barHeight);
     }
 
     // Desenhar estrelas
-    context.fillStyle = 'gold';
+    context.fillStyle = '#FF6347';
     stars.forEach(function(star) {
         context.beginPath();
         context.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
@@ -278,7 +293,7 @@ function drawGame() {
     });
 
     // Desenhar obstáculos
-    context.fillStyle = 'red';
+    context.fillStyle = '#87CEEB';
     obstacles.forEach(function(obstacle) {
         context.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     });
@@ -293,7 +308,7 @@ function drawGame() {
 // Função para desenhar o rastro do dash
 function drawDashTrail() {
     dashTrail.forEach(function(trail) {
-        context.fillStyle = `rgba(0, 255, 0, ${trail.alpha})`; // Mesma cor do jogador invencível com opacidade
+        context.fillStyle = `rgba(255, 210, 127, ${trail.alpha})`; // Mesma cor do jogador invencível com opacidade
         context.fillRect(trail.x, trail.y, trail.width, trail.height);
     });
 }
@@ -379,7 +394,10 @@ function circleRectCollision(circle, rect) {
     let dy = distY - rect.height / 2;
     return (dx * dx + dy * dy <= (circle.radius * circle.radius));
 }
+//#endregion
 
+
+//#region [ EVENTOS DOS BOTÕES ]
 // Eventos dos botões
 startButton.addEventListener('click', startGame);
 
@@ -394,3 +412,4 @@ menuButton.addEventListener('click', function() {
 exitbutton.addEventListener('click', function() {
     window.close();
 });
+//#endregion
