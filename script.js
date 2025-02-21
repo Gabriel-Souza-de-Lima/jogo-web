@@ -1,3 +1,4 @@
+//#region [ CONSTANTES CANVAS E MENU ] 
 const canvas = document.getElementById('gameCanvas');
 const context = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
@@ -5,7 +6,9 @@ const exitbutton = document.getElementById('exitbutton');
 const restartButton = document.getElementById('restartButton');
 const finalScore = document.getElementById('finalScore');
 const menuButton = document.getElementById('menuButton');
+//#endregion
 
+//#region [ VARIÁVEIS DE JOGO ]
 var keys = {};
 
 // Variáveis do jogo
@@ -16,16 +19,21 @@ var score;
 var gameLoop;
 var gameOver = false;
 var enemySpeedIncrement = 0; // Variável para incrementar a velocidade dos inimigos
+//#endregion
 
+//#region [ ÁUDIOS ]
 // Objeto de áudio
 var backgroundMusic = new Audio('Demo.mp3');
 var dashSound       = new Audio('Dash.mp3');
 var gameOverSound   = new Audio('Brincadeira_gente.mp3');
 
+
 // Garante que o som seja carregado antes, evitando problemas de reprodução em navegadores
 backgroundMusic.preload = 'auto'; 
 dashSound.preload = 'auto'; 
+//#endregion
 
+//#region [ VARIÁVEIS DE DASH/INVENCIBILIDADE ]
 // Variáveis do dash/invencibilidade
 var isInvincible = false;
 var invincibvarimer = 0;
@@ -36,10 +44,13 @@ var dashCooldownTimer = 0; // Tempo restante de cooldown do dash
 const dashCooldownTotal = 2.0; // Tempo total do cooldown
 const normalSpeed = 5;
 const dashSpeed = normalSpeed * 1.5; // Velocidade durante o dash
-
+ 
 // Variáveis para o rastro do dash (guarda as posições anteriores para criar o efeito de rastro)
 var dashTrail = [];
+//#endregion
 
+
+//#region [ EVENTOS DO TECLADO ] 
 // Eventos do teclado
 document.addEventListener('keydown', function(e) {
     keys[e.key] = true;
@@ -59,7 +70,9 @@ document.addEventListener('keyup', function(e) {
         dashAvailable = true;
     }
 });
+//#endregion
 
+//#region [ FUNÇÕES DO JOGO ]
 // Função para iniciar o jogo
 function startGame() {
     document.getElementById('menu').style.display = 'none';
@@ -379,7 +392,10 @@ function circleRectCollision(circle, rect) {
     let dy = distY - rect.height / 2;
     return (dx * dx + dy * dy <= (circle.radius * circle.radius));
 }
+//#endregion
 
+
+//#region [ EVENTOS DOS BOTÕES ]
 // Eventos dos botões
 startButton.addEventListener('click', startGame);
 
@@ -394,3 +410,4 @@ menuButton.addEventListener('click', function() {
 exitbutton.addEventListener('click', function() {
     window.close();
 });
+//#endregion
