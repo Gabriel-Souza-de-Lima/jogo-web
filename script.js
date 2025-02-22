@@ -19,6 +19,7 @@ var score;
 var gameLoop;
 var gameOver = false;
 var enemySpeedIncrement = 0; // Variável para incrementar a velocidade dos inimigos
+var lives = 3; // Vidas do jogador
 //#endregion
 
 //#region [ ÁUDIOS ]
@@ -80,7 +81,7 @@ function startGame() {
     document.getElementById('menu').style.display = 'none';
     document.getElementById('gameOver').style.display = 'none';
     canvas.style.display = 'block';
-    
+
     // Inicializar variáveis do jogo
     player = {
         x: canvas.width - 40, // Posiciona o jogador no canto inferior direito
@@ -89,6 +90,7 @@ function startGame() {
         height: 40,
         speed: normalSpeed
     };
+    lives = 3;
     stars = [];
     obstacles = [];
     score = 0;
@@ -240,12 +242,29 @@ function checkCollisions() {
         for (let i = 0; i < obstacles.length; i++) {
             let obstacle = obstacles[i];
             if (rectsCollide(player, obstacle)) {
-                endGame();
+                loseLife();
                 break;
             }
         }
     }
 }
+
+// Função para perda de vida
+function loseLife() { 
+    lives--;
+    if (lives === 0) {
+        endGame();
+    } else {
+        // Reposiciona o jogador para evitar colisões imediatas após perder vida
+        player.x = canvas.width - player.width;
+        player.y = canvas.height - player.height;
+           
+        // Ativa um segundo de invencibilidade após sofrer um golpe
+        isInvincible = true;
+        invincibleTimer = 1.5;
+    }
+}
+
 
 // Função para desenhar o jogo
 function drawGame() {
@@ -256,7 +275,7 @@ function drawGame() {
 
     // Desenhar jogador com cor diferente se estiver invencível
     if (isInvincible) {
-        context.fillStyle = '#FFD700'; // Cor diferente durante a invencibilidade
+        context.fillStyle = '#FFD700';
     } else {
         context.fillStyle = '#1E90FF';
     }
@@ -303,6 +322,7 @@ function drawGame() {
     context.font = '20px Arial';
     context.textAlign = 'left';
     context.fillText('Pontuação: ' + score, 10, 20);
+    context.fillText('Vidas: ' + lives, 10, 50);
 }
 
 // Função para desenhar o rastro do dash
