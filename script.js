@@ -19,6 +19,7 @@ var score;
 var gameLoop;
 var gameOver = false;
 var enemySpeedIncrement = 0; // Variável para incrementar a velocidade dos inimigos
+var lives = 3; // Vidas do jogador
 //#endregion
 
 //#region [ ÁUDIOS ]
@@ -38,7 +39,7 @@ dashSound.preload = 'auto';
 //#region [ VARIÁVEIS DE DASH/INVENCIBILIDADE ]
 // Variáveis do dash/invencibilidade
 var isInvincible = false;
-var invincibvarimer = 0;
+var invincibilityTimer  = 0;
 var isDashing = false;
 var dashTimer = 0;
 var dashAvailable = true; // Para evitar ativação múltipla do dash ao segurar a tecla
@@ -51,6 +52,15 @@ const dashSpeed = normalSpeed * 1.5; // Velocidade durante o dash
 var dashTrail = [];
 //#endregion
 
+//#region [ VARIÁVEIS DE POWER UPS ]
+
+// Variáveis e constantes para a mecânica de triplo de pontos
+var triplePointsActive = false;
+var triplePointsTimer  = 0;
+const triplePointsDuration = 5;
+var specialStar;
+
+//#endregion
 
 //#region [ EVENTOS DO TECLADO ] 
 // Eventos do teclado
@@ -80,7 +90,7 @@ function startGame() {
     document.getElementById('menu').style.display = 'none';
     document.getElementById('gameOver').style.display = 'none';
     canvas.style.display = 'block';
-    
+
     // Inicializar variáveis do jogo
     player = {
         x: canvas.width - 40, // Posiciona o jogador no canto inferior direito
@@ -89,18 +99,24 @@ function startGame() {
         height: 40,
         speed: normalSpeed
     };
+    lives = 3;
     stars = [];
     obstacles = [];
     score = 0;
     gameOver = false;
     enemySpeedIncrement = 0;
     isInvincible = false;
-    invincibleTimer = 0;
+    invincibilityTimer = 0;
     isDashing = false;
     dashTimer = 0;
     dashAvailable = true;
     dashCooldownTimer = 0;
     dashTrail = []; // Limpar o rastro ao iniciar o jogo
+
+    // Zerar variáveis de power ups
+    triplePointsActive = false;
+    triplePointsTimer  = 0;
+    specialStar = null;
     
     // Reproduzir música de fundo
     backgroundMusic.currentTime = 0; // Reinicia a música
@@ -118,7 +134,7 @@ function startGame() {
 // Função para ativar o dash
 function activateDash() {
     isInvincible = true;
-    invincibleTimer = 1.0; // Total de 1 segundo de invencibilidade
+    invincibilityTimer = 1.0; // Total de 1 segundo de invencibilidade
     isDashing = true;
     dashTimer = 0.7; // Duração do dash
     player.speed = dashSpeed; // Aumentar a velocidade do jogador
@@ -141,8 +157,8 @@ function updateDashInvincibility() {
         }
     }
     if (isInvincible) {
-        invincibleTimer -= 0.02; // Diminuir o tempo restante de invencibilidade
-        if (invincibleTimer <= 0) {
+        invincibilityTimer -= 0.02; // Diminuir o tempo restante de invencibilidade
+        if (invincibilityTimer <= 0) {
             isInvincible = false;
         }
     }
@@ -150,6 +166,13 @@ function updateDashInvincibility() {
         dashCooldownTimer -= 0.02; // Diminuir o cooldown do dash
         if (dashCooldownTimer < 0) {
             dashCooldownTimer = 0; // Garantir que não fique negativo
+        }
+    }
+
+    if (triplePointsActive) {
+        triplePointsTimer -= 0.02;
+        if (triplePointsTimer <= 0) {
+            triplePointsActive = false;
         }
     }
 }
@@ -224,10 +247,16 @@ function checkCollisions() {
     for (let i = stars.length - 1; i >= 0; i--) {
         let star = stars[i];
         if (circleRectCollision(star, player)) {
-            stars.splice(i, 1); // Remove a estrela
-            score += 10;
+            stars.splice(i, 1);
+        
+            if (triplePointsActive) {
+                score += 30;
+            } else {
+                score += 10;
+            }
         }
     }
+ 
 
     // Se todas as estrelas foram coletadas, gerar novas e aumentar velocidade dos inimigos
     if (stars.length === 0) {
@@ -235,17 +264,43 @@ function checkCollisions() {
         increaseEnemySpeed();
     }
 
+    if (specialStar && circleRectCollision(specialStar, player)) {
+        triplePointsActive = true;
+        triplePointsTimer  = triplePointsDuration;
+
+        specialStar = null;
+
+        // Adicionar áudio de quando a estrela for coletada
+    }
+
     // Verificar colisão com obstáculos somente se não estiver invencível
     if (!isInvincible) {
         for (let i = 0; i < obstacles.length; i++) {
             let obstacle = obstacles[i];
             if (rectsCollide(player, obstacle)) {
-                endGame();
+                loseLife();
                 break;
             }
         }
     }
 }
+
+// Função para perda de vida
+function loseLife() { 
+    lives--;
+    if (lives === 0) {
+        endGame();
+    } else {
+        // Reposiciona o jogador para evitar colisões imediatas após perder vida
+        player.x = canvas.width - player.width;
+        player.y = canvas.height - player.height;
+           
+        // Ativa um segundo de invencibilidade após sofrer um golpe
+        isInvincible = true;
+        invincibilityTimer = 1.5;
+    }
+}
+
 
 // Função para desenhar o jogo
 function drawGame() {
@@ -256,7 +311,7 @@ function drawGame() {
 
     // Desenhar jogador com cor diferente se estiver invencível
     if (isInvincible) {
-        context.fillStyle = '#FFD700'; // Cor diferente durante a invencibilidade
+        context.fillStyle = '#FFD700';
     } else {
         context.fillStyle = '#1E90FF';
     }
@@ -292,6 +347,14 @@ function drawGame() {
         context.fill();
     });
 
+    // Desenhar estrelas especiais
+    if (specialStar) {
+        context.fillStyle = '#FFD700'; // Dourado para destacar da estrela padrão
+        context.beginPath();
+        context.arc(specialStar.x, specialStar.y, specialStar.radius, 0, Math.PI * 2);
+        context.fill();
+    }
+
     // Desenhar obstáculos
     context.fillStyle = '#87CEEB';
     obstacles.forEach(function(obstacle) {
@@ -303,6 +366,7 @@ function drawGame() {
     context.font = '20px Arial';
     context.textAlign = 'left';
     context.fillText('Pontuação: ' + score, 10, 20);
+    context.fillText('Vidas: ' + lives, 10, 50);
 }
 
 // Função para desenhar o rastro do dash
@@ -313,7 +377,7 @@ function drawDashTrail() {
     });
 }
 
-// Função para gerar estrelas
+// Função para gerar estrelas normais e definir a chance a especial aparecer
 function generateStars() {
     for (let i = 0; i < 10; i++) {
         let star;
@@ -321,11 +385,32 @@ function generateStars() {
             star = {
                 x: Math.random() * (canvas.width - 20) + 5,
                 y: Math.random() * (canvas.height - 20) + 5,
-                radius: 5
+                radius: 5,
+                isSpecial: false
             };
         } while (circleRectCollision(star, player));
         stars.push(star);
     }
+
+    // A estrela especial tem 100% de chance de aparecer (uma por rodada)
+    if (Math.random() < 1.0) {
+        generateSpecialStar();
+    }
+}
+
+// Função para gerar a estrelas especiais
+function generateSpecialStar() {
+    let newStar;
+    do {
+        newStar = {
+            x: Math.random() * (canvas.width - 30) + 15,
+            y: Math.random() * (canvas.height - 30) + 15,
+            radius: 10,
+            isSpecial: true
+        };
+    } while (circleRectCollision(newStar, player));
+
+    specialStar = newStar;
 }
 
 // Função para gerar obstáculos
