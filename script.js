@@ -44,6 +44,9 @@ var isDashing = false;
 var dashTimer = 0;
 var dashAvailable = true; // Para evitar ativação múltipla do dash ao segurar a tecla
 var dashCooldownTimer = 0; // Tempo restante de cooldown do dash
+var nextInvincibilityThreshold = 200; // Variável que controla a pontuação para ativação do efeito de invencibilidade
+var bonusInvincibilityActive = false;
+var bonusInvincibilityTimer = 0;
 const dashCooldownTotal = 2.0; // Tempo total do cooldown
 const normalSpeed = 5;
 const dashSpeed = normalSpeed * 1.5; // Velocidade durante o dash
@@ -68,7 +71,7 @@ document.addEventListener('keydown', function(e) {
     keys[e.key] = true;
 
     // Ativar dash ao pressionar espaço, se não estiver em cooldown
-    if (e.key === ' ' && dashAvailable && !isDashing && !isInvincible && dashCooldownTimer <= 0) {
+    if (e.key === ' ' && dashAvailable && !isDashing && (bonusInvincibilityActive || !isInvincible) && dashCooldownTimer <= 0) {
         activateDash();
         dashAvailable = false;
     }
@@ -133,18 +136,20 @@ function startGame() {
 
 // Função para ativar o dash
 function activateDash() {
-    isInvincible = true;
-    invincibilityTimer = 1.0; // Total de 1 segundo de invencibilidade
-    isDashing = true;
-    dashTimer = 0.7; // Duração do dash
-    player.speed = dashSpeed; // Aumentar a velocidade do jogador
-    dashCooldownTimer = dashCooldownTotal; // Inicia o cooldown de 2 segundos
-    dashSound.currentTime = 0; // Reinicia o som do dash
     
-    // Toca do som do dash e trata caso haja erros
-    dashSound.play();   
-    dashSound.play().catch(error => console.warn('Erro ao reproduzir o som do dash:', error));
-}
+        // Se não estiver sob bônus, aplica a invencibilidade típica do dash
+        if (!bonusInvincibilityActive) {
+            isInvincible = true;
+            invincibilityTimer = 1.0;  // 1 segundo de invencibilidade do dash
+        }
+
+        isDashing = true;
+        dashTimer = 0.7; // Duração do dash
+        player.speed = dashSpeed; // Aumenta a velocidade
+        dashCooldownTimer = dashCooldownTotal; // Inicia o cooldown do dash
+        dashSound.currentTime = 0;
+        dashSound.play().catch(error => console.warn('Erro ao reproduzir o som do dash:', error));
+    }    
 
 // Função para atualizar o estado de invencibilidade, dash e cooldown
 function updateDashInvincibility() {
@@ -184,6 +189,7 @@ function updateGame() {
     moveObstacles();
     checkCollisions();
     updateDashInvincibility(); // Atualiza o estado de dash, invencibilidade e cooldown
+    updateBonusInvincibility();
     updateDashTrail(); // Atualiza o rastro durante o dash
     drawGame();
 }
@@ -253,9 +259,16 @@ function checkCollisions() {
                 score += 30;
             } else {
                 score += 10;
+                
+                if (score >= nextInvincibilityThreshold) {
+                    activateBonusInvincibility();
+                    nextInvincibilityThreshold += 200; // Atualiza o próximo gatilho
+                }    
             }
         }
     }
+
+
  
 
     // Se todas as estrelas foram coletadas, gerar novas e aumentar velocidade dos inimigos
@@ -301,7 +314,6 @@ function loseLife() {
     }
 }
 
-
 // Função para desenhar o jogo
 function drawGame() {
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -310,11 +322,14 @@ function drawGame() {
     drawDashTrail();
 
     // Desenhar jogador com cor diferente se estiver invencível
-    if (isInvincible) {
-        context.fillStyle = '#FFD700';
+    if (bonusInvincibilityActive) {
+        context.fillStyle = '#32CD32'; // Cor verde forte para bônus
+    } else if (isInvincible) {
+        context.fillStyle = '#FFD700'; // Cor dourada da invencibilidade comum
     } else {
-        context.fillStyle = '#1E90FF';
+        context.fillStyle = '#1E90FF'; // Cor padrão
     }
+    
     context.fillRect(player.x, player.y, player.width, player.height);
 
     // Desenhar barra de cooldown acima do jogador
@@ -479,8 +494,28 @@ function circleRectCollision(circle, rect) {
     let dy = distY - rect.height / 2;
     return (dx * dx + dy * dy <= (circle.radius * circle.radius));
 }
-//#endregion
 
+function activateBonusInvincibility() {
+    bonusInvincibilityActive = true;
+    bonusInvincibilityTimer = 5.0 // 5 segundos de invencibilidade
+
+    // Implementar efeito sonoro e visual posteriormente
+
+    console.log("Incenbilidade ativada por 5 segundos!");
+}
+
+function updateBonusInvincibility() {
+    if (bonusInvincibilityActive) {
+        bonusInvincibilityTimer -= 0.02;
+        if (bonusInvincibilityTimer <= 0) {
+            bonusInvincibilityActive = false;
+            bonusInvincibilityTimer = 0; // Reset do timer, garantindo clareza
+            console.log("Invencibilidade bônus finalizada.");
+        }
+    }
+}
+
+//#endregion
 
 //#region [ EVENTOS DOS BOTÕES ]
 // Eventos dos botões
