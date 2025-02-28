@@ -44,9 +44,10 @@ var isDashing = false;
 var dashTimer = 0;
 var dashAvailable = true; // Para evitar ativação múltipla do dash ao segurar a tecla
 var dashCooldownTimer = 0; // Tempo restante de cooldown do dash
-var nextInvincibilityThreshold = 200; // Variável que controla a pontuação para ativação do efeito de invencibilidade
+var nextInvincibilityThreshold = 750; // Variável que controla a pontuação para ativação do efeito de invencibilidade
 var bonusInvincibilityActive = false;
 var bonusInvincibilityTimer = 0;
+var bonusPointsCounter = 0; // Variável que controla o bônus (reseta ao morrer ou estando com o bônus atualmente ativo)
 const dashCooldownTotal = 2.0; // Tempo total do cooldown
 const normalSpeed = 5;
 const dashSpeed = normalSpeed * 1.5; // Velocidade durante o dash
@@ -259,17 +260,16 @@ function checkCollisions() {
                 score += 30;
             } else {
                 score += 10;
-                
-                if (score >= nextInvincibilityThreshold) {
-                    activateBonusInvincibility();
-                    nextInvincibilityThreshold += 200; // Atualiza o próximo gatilho
-                }    
+
+            }
+                      
+            if (score >= nextInvincibilityThreshold) {
+                activateBonusInvincibility();
+                nextInvincibilityThreshold += 750; // Atualiza o próximo gatilho
+
             }
         }
     }
-
-
- 
 
     // Se todas as estrelas foram coletadas, gerar novas e aumentar velocidade dos inimigos
     if (stars.length === 0) {
@@ -501,7 +501,7 @@ function activateBonusInvincibility() {
 
     // Implementar efeito sonoro e visual posteriormente
 
-    console.log("Incenbilidade ativada por 5 segundos!");
+    console.log("🛡️ Invencibilidade bônus ativada por 5 segundos!");
 }
 
 function updateBonusInvincibility() {
