@@ -287,7 +287,7 @@ function checkCollisions() {
     }
 
     // Verificar colisão com obstáculos somente se não estiver invencível
-    if (!isInvincible) {
+    if (!isInvincible && !bonusInvincibilityActive) {
         for (let i = 0; i < obstacles.length; i++) {
             let obstacle = obstacles[i];
             if (rectsCollide(player, obstacle)) {
@@ -307,7 +307,10 @@ function loseLife() {
         // Reposiciona o jogador para evitar colisões imediatas após perder vida
         player.x = canvas.width - player.width;
         player.y = canvas.height - player.height;
-           
+        
+        // Reseta o contador de pontos até a próxima invencibilidade
+        nextInvincibilityThreshold = score + 750;
+
         // Ativa um segundo de invencibilidade após sofrer um golpe
         isInvincible = true;
         invincibilityTimer = 1.5;
@@ -376,12 +379,17 @@ function drawGame() {
         context.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     });
 
-    // Desenhar pontuação
+    // Desenhar pontuação e vidas
     context.fillStyle = 'white';
-    context.font = '20px Arial';
+    context.font      = '20px Arial';
     context.textAlign = 'left';
     context.fillText('Pontuação: ' + score, 10, 20);
     context.fillText('Vidas: ' + lives, 10, 50);
+
+    // Adicionar contador de pontos até próxima invencibilidade no canto superior direito
+    context.textAlign = 'right';
+    let pontosFaltando = Math.max(0, nextInvincibilityThreshold - score);
+    context.fillText(`Invencibilidade em: ${pontosFaltando} pts`, canvas.width - 10, 20);
 }
 
 // Função para desenhar o rastro do dash
@@ -498,6 +506,7 @@ function circleRectCollision(circle, rect) {
 function activateBonusInvincibility() {
     bonusInvincibilityActive = true;
     bonusInvincibilityTimer = 5.0 // 5 segundos de invencibilidade
+    isInvincible = true;
 
     // Implementar efeito sonoro e visual posteriormente
 
@@ -509,6 +518,7 @@ function updateBonusInvincibility() {
         bonusInvincibilityTimer -= 0.02;
         if (bonusInvincibilityTimer <= 0) {
             bonusInvincibilityActive = false;
+            isInvincible = false;
             bonusInvincibilityTimer = 0; // Reset do timer, garantindo clareza
             console.log("Invencibilidade bônus finalizada.");
         }
