@@ -478,7 +478,7 @@ function endGame() {
     gameOverSound.play ();
 }
 
-// Funções de colisão
+// Função de colisão 1
 function rectsCollide(rect1, rect2) {
     return (
         rect1.x < rect2.x + rect2.width &&
@@ -488,6 +488,7 @@ function rectsCollide(rect1, rect2) {
     );
 }
 
+// Função de colisão 2
 function circleRectCollision(circle, rect) {
     let distX = Math.abs(circle.x - rect.x - rect.width / 2);
     let distY = Math.abs(circle.y - rect.y - rect.height / 2);
@@ -503,6 +504,7 @@ function circleRectCollision(circle, rect) {
     return (dx * dx + dy * dy <= (circle.radius * circle.radius));
 }
 
+// Função para ativar o bônus de invencibilidade
 function activateBonusInvincibility() {
     bonusInvincibilityActive = true;
     bonusInvincibilityTimer = 5.0 // 5 segundos de invencibilidade
@@ -513,6 +515,7 @@ function activateBonusInvincibility() {
     console.log("🛡️ Invencibilidade bônus ativada por 5 segundos!");
 }
 
+// Função para atualizar o bônus de invencibilidade e garantir seu término
 function updateBonusInvincibility() {
     if (bonusInvincibilityActive) {
         bonusInvincibilityTimer -= 0.02;
